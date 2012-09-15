@@ -11,7 +11,6 @@ public class PenGrab : MonoBehaviour {
 	private bool buttonPrev = false;
 	private GameObject selected;
 	private GameObject collided;
-	private RaycastHit collidedRaycast;
 	private float selectedObjectDistance;
 	private Vector3 selectedObjectHitPos;
 	
@@ -21,67 +20,61 @@ public class PenGrab : MonoBehaviour {
 	
 	void Update () {
 		Ray pointerRay = new Ray(transform.position, transform.rotation*Vector3.forward);
-		
-		LineRenderer line = GetComponent<LineRenderer>();
-		line.SetPosition (0, pointerRay.origin);
-		line.SetPosition (1, pointerRay.GetPoint(rayLength));
-		
-		RaycastHit[] allCollidedRaycasts;
-		allCollidedRaycasts = Physics.RaycastAll (pointerRay);
-		
-		
-		if (allCollidedRaycasts.Length > 0) {
-			collidedRaycast = allCollidedRaycasts[0];
-			CollidedObjEnterCallback(collidedRaycast.collider);
-			//Debug.Log("on obj");
-		} else {
-			//collidedRaycast = null;
-			CollidedObjExitCallback();
-		}
-			
+		DrawRay(pointerRay);
+
+		RaycastHit collidedRaycast = GetCollidedRaycast(pointerRay);
 		
 		bool buttonCurrent = zspace.GetComponent<ZSCore>().IsTargetButtonPressed(ZSCore.TrackerTargetType.Primary, 0);
-		bool justSelected = buttonCurrent && !buttonPrev;
-		if (justSelected) {
-			
-			selected = collidedRaycast.collider.gameObject;
-			if(selected) {
-				selectedObjectDistance =  collidedRaycast.distance;
-				selectedObjectHitPos = collidedRaycast.collider.gameObject.transform.position - collidedRaycast.point;
-				selected.rigidbody.isKinematic = false;
-			}
-		}
-		if(buttonCurrent) {
-			if (selected ) {
-				
-				Vector3 diff = pointerRay.GetPoint(selectedObjectDistance)+selectedObjectHitPos - selected.transform.position;
-				Vector3 force = diff*springConstant - dampingConstant*selected.rigidbody.velocity;
-				selected.rigidbody.AddForce(force);
-			}
-		}
-		bool justDeselected = !buttonCurrent && buttonPrev;
-		if (justDeselected) {
-			if (selected) {
-				selected.rigidbody.isKinematic = true;
-				selected = null;
-			}
+		
+		if (buttonCurrent && !buttonPrev) {
+			ButtonJustPressed(collidedRaycast);
+		} else if (buttonCurrent) {
+			ButtonPressed(pointerRay);
+		} else if (!buttonCurrent && buttonPrev) {
+			ButtonJustReleased(collidedRaycast);
 		}
 		buttonPrev = buttonCurrent;
-		
-		
 	}
 	
-	void CollidedObjEnterCallback(Collider other) {
-		
-		if (!other.GetComponent(typeof(Rigidbody))) {
-			collided = null;
-		} else if (!collided) {
-			collided = other.gameObject;
+	void DrawRay(Ray ray) {
+		LineRenderer line = GetComponent<LineRenderer>();
+		line.SetPosition (0, ray.origin);
+		line.SetPosition (1, ray.GetPoint(rayLength));
+	}
+	
+	RaycastHit GetCollidedRaycast(Ray pointerRay) {
+		RaycastHit[] allCollidedRaycasts = Physics.RaycastAll (pointerRay);
+		if (allCollidedRaycasts.Length > 0) {
+			return allCollidedRaycasts[0];
+		} else {
+			return new RaycastHit();
+		}
+	}
+	
+	void ButtonJustPressed(RaycastHit raycastHit) {
+		if (!raycastHit.collider) {
+			return;
 		}
 		
+		selected = raycastHit.collider.gameObject;
+		selectedObjectDistance =  raycastHit.distance;
+		selectedObjectHitPos = raycastHit.collider.gameObject.transform.position - raycastHit.point;
+		selected.rigidbody.isKinematic = false;
 	}
-	
-	void CollidedObjExitCallback() {
-		collided = null;
+		
+	void ButtonJustReleased(RaycastHit raycastHit) {
+		if (selected) {
+			selected.rigidbody.isKinematic = true;
+			selected = null;
+		}
+	}
+		
+	void ButtonPressed(Ray pointerRay) {
+		if (selected) {
+			Vector3 diff = pointerRay.GetPoint(selectedObjectDistance)+selectedObjectHitPos - selected.transform.position;
+			Vector3 force = diff * springConstant - dampingConstant*selected.rigidbody.velocity;
+			selected.rigidbody.AddForce(force);
+		}
 	}
 }
+
