@@ -47,6 +47,7 @@
      <Compile Include="Assets\Scripts\BlockSelection.cs" />
      <Compile Include="Assets\Scripts\PenGrab.cs" />
      <Compile Include="Assets\Scripts\PenRotate.cs" />
+     <Compile Include="Assets\Scripts\Reset.cs" />
      <Compile Include="Assets\Scripts\StylusTransform.cs" />
      <Compile Include="Assets\Scripts\zSpace\ZSCore.cs" />
      <Compile Include="Assets\Scripts\zSpace\ZSFinalCamera.cs" />
