@@ -19,10 +19,14 @@ public class PenGrab : MonoBehaviour {
 	}
 	
 	void Update () {
+		ClearBlockHighlighting();
 		Ray pointerRay = new Ray(transform.position, transform.rotation*Vector3.forward);
 		DrawRay(pointerRay);
 
 		RaycastHit collidedRaycast = GetCollidedRaycast(pointerRay);
+		if (collidedRaycast.collider && !selected) {
+			collidedRaycast.collider.gameObject.SendMessageUpwards ("AddHoverHighlight");
+		}
 		
 		bool buttonCurrent = zspace.GetComponent<ZSCore>().IsTargetButtonPressed(ZSCore.TrackerTargetType.Primary, 0);
 		
@@ -44,10 +48,7 @@ public class PenGrab : MonoBehaviour {
 	
 	RaycastHit GetCollidedRaycast(Ray pointerRay) {
 		RaycastHit[] allCollidedRaycasts = Physics.RaycastAll (pointerRay);
-		if (allCollidedRaycasts.Length > 0 
-			&& allCollidedRaycasts[0].collider) {
-			
-			allCollidedRaycasts[0].collider.gameObject.SendMessageUpwards ("AddHoverHighlight");
+		if (allCollidedRaycasts.Length > 0 && allCollidedRaycasts[0].collider) {
 			return allCollidedRaycasts[0];
 		} else {
 			return new RaycastHit();
@@ -58,28 +59,33 @@ public class PenGrab : MonoBehaviour {
 		if (!raycastHit.collider) {
 			return;
 		}
-		
 		selected = raycastHit.collider.gameObject.transform.root.gameObject;
 		selectedObjectDistance =  raycastHit.distance;
 		selectedObjectHitPos = raycastHit.collider.gameObject.transform.root.transform.position - raycastHit.point;
-		selected.rigidbody.isKinematic = false;
-		selected.GetComponent<BlockSelection>().AddSelectedHighlight();
+		selected.rigidbody.isKinematic = false;	
 	}
 		
 	void ButtonJustReleased(RaycastHit raycastHit) {
 		if (selected) {
-			selected.GetComponent<BlockSelection>().RemoveHighlight();
 			selected.rigidbody.isKinematic = true;
 			selected = null;
 		}
 	}
-		
 	void ButtonPressed(Ray pointerRay) {
 		if (selected) {
+			selected.GetComponent<BlockSelection>().AddSelectedHighlight();
 			Vector3 diff = pointerRay.GetPoint(selectedObjectDistance)+selectedObjectHitPos - selected.transform.position;
 			Vector3 force = diff * springConstant - dampingConstant*selected.rigidbody.velocity;
 			selected.rigidbody.AddForce(force);
 		}
+	}
+	
+	void ClearBlockHighlighting() {
+		Object[] objects = FindObjectsOfType(typeof(BlockSelection));
+		foreach (Object block in objects) {
+			BlockSelection blockSelection = block as BlockSelection;
+			blockSelection.RemoveHighlight();
+		}	
 	}
 }
 
