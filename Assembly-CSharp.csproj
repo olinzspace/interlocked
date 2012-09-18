@@ -44,6 +44,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\BlockSelection.cs" />
      <Compile Include="Assets\Scripts\PenGrab.cs" />
      <Compile Include="Assets\Scripts\StylusTransform.cs" />
      <Compile Include="Assets\Scripts\zSpace\ZSCore.cs" />

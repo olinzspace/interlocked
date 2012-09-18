@@ -45,6 +45,7 @@ public class PenGrab : MonoBehaviour {
 	RaycastHit GetCollidedRaycast(Ray pointerRay) {
 		RaycastHit[] allCollidedRaycasts = Physics.RaycastAll (pointerRay);
 		if (allCollidedRaycasts.Length > 0) {
+			allCollidedRaycasts[0].collider.gameObject.GetComponent<BlockSelection>().AddHoverHighlight();
 			return allCollidedRaycasts[0];
 		} else {
 			return new RaycastHit();
@@ -60,10 +61,12 @@ public class PenGrab : MonoBehaviour {
 		selectedObjectDistance =  raycastHit.distance;
 		selectedObjectHitPos = raycastHit.collider.gameObject.transform.position - raycastHit.point;
 		selected.rigidbody.isKinematic = false;
+		selected.GetComponent<BlockSelection>().AddSelectedHighlight();
 	}
 		
 	void ButtonJustReleased(RaycastHit raycastHit) {
 		if (selected) {
+			selected.GetComponent<BlockSelection>().RemoveHighlight();
 			selected.rigidbody.isKinematic = true;
 			selected = null;
 		}
