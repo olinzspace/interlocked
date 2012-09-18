@@ -16,16 +16,11 @@ public class PenRotate : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		bool currentButton = zspace.IsTargetButtonPressed(ZSCore.TrackerTargetType.Primary, 1);
-		Debug.Log(currentButton);
 		Vector3 localPos = zspace.GetTargetPose(ZSCore.TrackerTargetType.Primary).GetColumn(3);
 		if (currentButton) {
-			
 			Vector3 diff = startMousePos - localPos;
-			Debug.Log(diff);
-			
 			mainCamera.transform.RotateAround(Vector3.zero, -mainCamera.transform.TransformDirection(Vector3.up), diff.x*rotationScale);
 			mainCamera.transform.RotateAround(Vector3.zero, -mainCamera.transform.TransformDirection(Vector3.left), diff.y*rotationScale);
-			
 		}
 		startMousePos = localPos;
 	}
