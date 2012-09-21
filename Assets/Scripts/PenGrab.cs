@@ -28,7 +28,7 @@ public class PenGrab : MonoBehaviour {
 			collidedRaycast.collider.gameObject.SendMessageUpwards ("AddHoverHighlight");
 		}
 		
-		bool buttonCurrent = zspace.GetComponent<ZSCore>().IsTargetButtonPressed(ZSCore.TrackerTargetType.Primary, 0);
+		bool buttonCurrent = zspace.GetComponent<ZSCore>().IsTrackerTargetButtonPressed(ZSCore.TrackerTargetType.Primary, 0);
 		
 		if (buttonCurrent && !buttonPrev) {
 			ButtonJustPressed(collidedRaycast);
