@@ -48,11 +48,22 @@ public class PenGrab : MonoBehaviour {
 	
 	RaycastHit GetCollidedRaycast(Ray pointerRay) {
 		RaycastHit[] allCollidedRaycasts = Physics.RaycastAll (pointerRay);
-		if (allCollidedRaycasts.Length > 0 && allCollidedRaycasts[0].collider) {
-			return allCollidedRaycasts[0];
-		} else {
-			return new RaycastHit();
+		
+		RaycastHit collidedRaycast = new RaycastHit();
+		float shortestDistance = -1.0f;
+		
+		// Find the collided object that's closest to the origin of the ray
+		for (int i=0; i < allCollidedRaycasts.Length; i++) {
+			if (!allCollidedRaycasts[i].collider)
+				break;
+			Vector3 objectHitPos = allCollidedRaycasts[i].collider.gameObject.transform.root.transform.position - pointerRay.origin;
+			if (objectHitPos.magnitude < shortestDistance || shortestDistance == -1.0) {
+				collidedRaycast = allCollidedRaycasts[i];
+				shortestDistance = objectHitPos.magnitude;
+			}
 		}
+		
+		return collidedRaycast;
 	}
 	
 	void ButtonJustPressed(RaycastHit raycastHit) {
