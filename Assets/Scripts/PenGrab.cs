@@ -55,8 +55,9 @@ public class PenGrab : MonoBehaviour {
 		// Find the collided object that's closest to the origin of the ray
 		for (int i=0; i < allCollidedRaycasts.Length; i++) {
 			if (!allCollidedRaycasts[i].collider)
-				break;
-			Vector3 objectHitPos = allCollidedRaycasts[i].collider.gameObject.transform.root.transform.position - pointerRay.origin;
+				continue;
+			//Vector3 objectHitPos = allCollidedRaycasts[i].collider.gameObject.transform.root.transform.position - pointerRay.origin;
+			Vector3 objectHitPos = allCollidedRaycasts[i].point - pointerRay.origin;
 			if (objectHitPos.magnitude < shortestDistance || shortestDistance == -1.0) {
 				collidedRaycast = allCollidedRaycasts[i];
 				shortestDistance = objectHitPos.magnitude;
