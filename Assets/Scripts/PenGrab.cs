@@ -44,7 +44,7 @@ public class PenGrab : MonoBehaviour {
 	void DrawRay(Ray ray, RaycastHit raycast) {
 		LineRenderer line = GetComponent<LineRenderer>();
 		line.SetPosition (0, ray.origin);
-		if(raycast.collider) { 
+		if(raycast.collider) {
 			float newLength = (ray.origin-raycast.point).magnitude;
 			line.SetPosition (1, ray.GetPoint(newLength));
 		} else {
