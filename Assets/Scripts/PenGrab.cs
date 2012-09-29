@@ -5,7 +5,7 @@ public class PenGrab : MonoBehaviour {
 	public float springConstant = 100.0f;
 	public float dampingConstant = 10.0f;
 	public float rayLength = 10.0f;
-	
+	public float maxForce = 10.0f;
 	public GameObject zspace;
 	
 	private bool buttonPrev = false;
@@ -87,6 +87,9 @@ public class PenGrab : MonoBehaviour {
 			selected.GetComponent<BlockSelection>().AddSelectedHighlight();
 			Vector3 diff = pointerRay.GetPoint(selectedObjectDistance)+selectedObjectHitPos - selected.transform.position;
 			Vector3 force = diff * springConstant - dampingConstant*selected.rigidbody.velocity;
+			if (force.magnitude > maxForce) {
+				force = maxForce*force.normalized;	
+			}
 			selected.rigidbody.AddForce(force);
 		}
 	}
