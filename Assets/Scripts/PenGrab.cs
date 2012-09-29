@@ -21,9 +21,10 @@ public class PenGrab : MonoBehaviour {
 	void Update () {
 		ClearBlockHighlighting();
 		Ray pointerRay = new Ray(transform.position, transform.rotation*Vector3.forward);
-		DrawRay(pointerRay);
+		
 
 		RaycastHit collidedRaycast = GetCollidedRaycast(pointerRay);
+		DrawRay(pointerRay, collidedRaycast);
 		if (collidedRaycast.collider && !selected) {
 			collidedRaycast.collider.gameObject.SendMessageUpwards ("AddHoverHighlight");
 		}
@@ -40,10 +41,15 @@ public class PenGrab : MonoBehaviour {
 		buttonPrev = buttonCurrent;
 	}
 	
-	void DrawRay(Ray ray) {
+	void DrawRay(Ray ray, RaycastHit raycast) {
 		LineRenderer line = GetComponent<LineRenderer>();
 		line.SetPosition (0, ray.origin);
-		line.SetPosition (1, ray.GetPoint(rayLength));
+		if(raycast.collider) { 
+			float newLength = (ray.origin-raycast.point).magnitude;
+			line.SetPosition (1, ray.GetPoint(newLength));
+		} else {
+			line.SetPosition (1, ray.GetPoint(rayLength));
+		}
 	}
 	
 	RaycastHit GetCollidedRaycast(Ray pointerRay) {
