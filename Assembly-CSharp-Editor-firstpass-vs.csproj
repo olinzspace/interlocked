@@ -5,11 +5,11 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{4B7089ED-1FAD-A127-A422-950CEAB28E7A}</ProjectGuid>
+	<ProjectGuid>{0D9642E2-C1DE-D3CB-BC24-B2F3E3A4C8F0}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
-	<AssemblyName>Assembly-CSharp</AssemblyName>
+	<AssemblyName>Assembly-CSharp-Editor-firstpass</AssemblyName>
 	<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
 	<FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -44,18 +44,11 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\BlockPosition.cs" />
-     <Compile Include="Assets\Scripts\BlockSelection.cs" />
-     <Compile Include="Assets\Scripts\MouseRotate.cs" />
-     <Compile Include="Assets\Scripts\PenGrab.cs" />
-     <Compile Include="Assets\Scripts\PenRotate.cs" />
-     <Compile Include="Assets\Scripts\Reset.cs" />
-     <Compile Include="Assets\Scripts\StereoSettings.cs" />
-     <Compile Include="Assets\Scripts\StylusTransform.cs" />
-     <Compile Include="Assets\Scripts\zSpace\ZSCore.cs" />
-     <Compile Include="Assets\Scripts\zSpace\ZSFinalCamera.cs" />
-     <Compile Include="Assets\Scripts\zSpace\ZSLeftCamera.cs" />
-     <Compile Include="Assets\Scripts\zSpace\ZSRightCamera.cs" />
+     <Compile Include="Assets\Standard Assets\Editor\Water (Pro Only)\Water4\GerstnerDisplaceEditor.cs" />
+     <Compile Include="Assets\Standard Assets\Editor\Water (Pro Only)\Water4\PlanarReflectionEditor.cs" />
+     <Compile Include="Assets\Standard Assets\Editor\Water (Pro Only)\Water4\SpecularLightingEditor.cs" />
+     <Compile Include="Assets\Standard Assets\Editor\Water (Pro Only)\Water4\WaterBaseEditor.cs" />
+     <Compile Include="Assets\Standard Assets\Editor\Water (Pro Only)\Water4\WaterEditorUtility.cs" />
      <None Include="Assets\Standard Assets\Skyboxes\_skybox info.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -6,12 +6,12 @@ public class BlockSelection : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-	
+		
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+
 	}
 	
 	public void AddHoverHighlight() {
@@ -25,5 +25,4 @@ public class BlockSelection : MonoBehaviour {
 	public void RemoveHighlight() {
 		gameObject.renderer.material = baseMaterial;
 	}
-	
 }
