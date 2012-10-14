@@ -14,7 +14,7 @@ public class MouseGrab : MonoBehaviour {
 	private float selectedObjectDistance;
 	private Vector3 selectedHitPos;
 	private Vector3 gimbleHitPos;
-	private Vector3 direction = Vector3.zero;
+	private Vector3 moveDirection = Vector3.zero;
 	Ray pointerRay;
 
 	private bool buttonPrev = false;
@@ -32,11 +32,10 @@ public class MouseGrab : MonoBehaviour {
 				UpdateSelected();
 			} else {
 				UpdateDirection();
-				if (direction == Vector3.zero) {
+				if (moveDirection == Vector3.zero) {
 					UpdateSelected();
 				}
 			}
-
 			
 			if (selectedGameobject) {
 				ShowGimble(selectedHitPos);
@@ -47,25 +46,42 @@ public class MouseGrab : MonoBehaviour {
 			UpdateForce();
 
 		} else if (!buttonCurrent && buttonPrev) {
-		
+			if (selectedGameobject) {
+				selectedGameobject.rigidbody.isKinematic = true;
+			}
 		}
 		buttonPrev = buttonCurrent;
 	}
 	
 	void UpdateForce() {
-		/*
-		if (selectedGameobject) {
+
+		if (selectedGameobject && moveDirection != Vector3.zero) {
+			selectedGameobject.rigidbody.isKinematic = false;	
 			selectedGameobject.GetComponent<BlockSelection>().AddSelectedHighlight();
 		
-			Vector3 diff = pointerRay.GetPoint(selectedObjectDistance)+selectedHitPos-selectedGameobject.transform.position;
-			diff = new Vector3(diff.x*direction.x, diff.y*direction.y, diff.z*direction.z);
+			Vector3 diff = pointerRay.GetPoint(selectedObjectDistance) + gimbleHitPos - selectedGameobject.transform.position;
+			
 			Vector3 force = diff * springConstant - dampingConstant*selectedGameobject.rigidbody.velocity;
+			force = new Vector3(force.x*moveDirection.x, force.y*moveDirection.y, force.z*moveDirection.z);
 			if (force.magnitude > maxForce) {
 				force = maxForce*force.normalized;	
 			}
-			//selected.rigidbody.AddForce(force);
-			//gimble.transform.position = selectedGameobject.transform.position-selectedObjectHitPos;
-		}	*/
+			
+			selectedGameobject.rigidbody.AddForce(force);
+			selectedGameobject.rigidbody.constraints |= RigidbodyConstraints.FreezePositionX;
+			selectedGameobject.rigidbody.constraints |= RigidbodyConstraints.FreezePositionY;
+			selectedGameobject.rigidbody.constraints |= RigidbodyConstraints.FreezePositionZ;
+			
+			if( moveDirection == new Vector3(1,0,0)) {
+				selectedGameobject.rigidbody.constraints &= ~RigidbodyConstraints.FreezePositionX;
+			} else if( moveDirection == new Vector3(0, 1, 0) ) {
+				selectedGameobject.rigidbody.constraints &= ~RigidbodyConstraints.FreezePositionY;	
+			} else if( moveDirection == new Vector3(0, 0, 1) ) {
+				selectedGameobject.rigidbody.constraints &= ~RigidbodyConstraints.FreezePositionZ;
+			}
+			
+			gimble.transform.position = selectedGameobject.transform.position-gimbleHitPos;
+		}	
 	}
 		
 	void UpdateSelected() {
@@ -75,12 +91,14 @@ public class MouseGrab : MonoBehaviour {
 		
 		// Find the collided object that's closest to the origin of the ray
 		for (int i=0; i < allCollidedRaycasts.Length; i++) {
-			if (!allCollidedRaycasts[i].collider || allCollidedRaycasts[i].collider.gameObject.layer == 8)
+			if (!allCollidedRaycasts[i].collider && 
+				!allCollidedRaycasts[i].collider.gameObject.transform.root.gameObject.GetComponent<BlockSelection>())
 				continue;
-			//Vector3 objectHitPos = allCollidedRaycasts[i].collider.gameObject.transform.root.transform.position - pointerRay.origin;
+			if (allCollidedRaycasts[i].collider.gameObject.layer == 8)
+				continue;
 			Vector3 objectHitPos = allCollidedRaycasts[i].point - pointerRay.origin;
 			if (objectHitPos.magnitude < selectedObjectDistance || selectedObjectDistance == -1.0) {
-				selectedGameobject = allCollidedRaycasts[i].collider.gameObject;
+				selectedGameobject = allCollidedRaycasts[i].collider.gameObject.transform.root.gameObject;
 				selectedObjectDistance = objectHitPos.magnitude;
 				selectedHitPos = allCollidedRaycasts[i].point;
 			}
@@ -106,13 +124,15 @@ public class MouseGrab : MonoBehaviour {
 			if (objectHitPos.magnitude < shortestDistance || shortestDistance == -1.0) {
 				gameobj = allCollidedRaycasts[i].collider.gameObject;
 				shortestDistance = objectHitPos.magnitude;
-				gimbleHitPos = allCollidedRaycasts[i].collider.gameObject.transform.root.transform.position - allCollidedRaycasts[i].point;
+				gimbleHitPos = selectedGameobject.transform.position - allCollidedRaycasts[i].point;
 			}
 		}
 		if (gameobj) {
-			direction = gameobj.GetComponent<GimbleSelection>().direction;
+			moveDirection = gameobj.GetComponent<GimbleSelection>().gimbleDirection;
+
 		} else {
-			direction = Vector3.zero;	
+			moveDirection = Vector3.zero;	
+			gimbleHitPos = Vector3.zero;
 		}
 	}
 	

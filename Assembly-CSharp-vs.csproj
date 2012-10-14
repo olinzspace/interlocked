@@ -45,7 +45,9 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\BlockSelection.cs" />
+     <Compile Include="Assets\Scripts\GimbleSelection.cs" />
      <Compile Include="Assets\Scripts\MouseGrab.cs" />
+     <Compile Include="Assets\Scripts\MouseGrabTrash.cs" />
      <Compile Include="Assets\Scripts\MouseRotate.cs" />
      <Compile Include="Assets\Scripts\PenGrab.cs" />
      <Compile Include="Assets\Scripts\PenRotate.cs" />
