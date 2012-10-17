@@ -17,6 +17,7 @@ public class MouseGrab : MonoBehaviour {
 	private Vector3 moveDirection = Vector3.zero;
 	Ray pointerRay;
 
+	Vector3 initialDeltaGimble = Vector3.zero;
 	private bool buttonPrev = false;
 	
 	void Start() {
@@ -28,17 +29,28 @@ public class MouseGrab : MonoBehaviour {
 		
 		bool buttonCurrent = Input.GetMouseButton(0);
 		if (buttonCurrent && !buttonPrev) {
+			initialDeltaGimble = Vector3.zero;
 			if (!selectedGameobject) {
+				
 				UpdateSelected();
 			} else {
+				selectedGameobject.GetComponent<BlockSelection>().RemoveHighlight();
 				UpdateDirection();
 				if (moveDirection == Vector3.zero) {
+					GameObject prev = selectedGameobject;
 					UpdateSelected();
+					if (prev != selectedGameobject) {
+						HideGimble();
+					}
+					
 				}
 			}
 			
 			if (selectedGameobject) {
-				ShowGimble(selectedHitPos);
+				selectedGameobject.GetComponent<BlockSelection>().AddHoverHighlight();
+				if (gimble.active == false) {
+					ShowGimble(selectedHitPos);
+				}
 			} else {
 				HideGimble();
 			}
@@ -47,8 +59,11 @@ public class MouseGrab : MonoBehaviour {
 
 		} else if (!buttonCurrent && buttonPrev) {
 			if (selectedGameobject) {
+				selectedGameobject.GetComponent<BlockSelection>().AddHoverHighlight();
 				selectedGameobject.rigidbody.isKinematic = true;
+				
 			}
+			initialDeltaGimble = Vector3.zero;
 		}
 		buttonPrev = buttonCurrent;
 	}
@@ -79,8 +94,11 @@ public class MouseGrab : MonoBehaviour {
 			} else if( moveDirection == new Vector3(0, 0, 1) ) {
 				selectedGameobject.rigidbody.constraints &= ~RigidbodyConstraints.FreezePositionZ;
 			}
-			
-			gimble.transform.position = selectedGameobject.transform.position-gimbleHitPos;
+			if (initialDeltaGimble == Vector3.zero) {
+				initialDeltaGimble = gimble.transform.position-selectedGameobject.transform.position;
+			}
+			gimble.transform.position = selectedGameobject.transform.position+initialDeltaGimble;
+			//gimble.transform.position = selectedGameobject.transform.position-gimbleHitPos;
 		}	
 	}
 		

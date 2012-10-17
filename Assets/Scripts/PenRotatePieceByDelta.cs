@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class PenGrab : MonoBehaviour {
+public class PenRotatePieceByDelta : MonoBehaviour {
 	public float springConstant = 100.0f;
 	public float dampingConstant = 10.0f;
 	public float rayLength = 10.0f;
@@ -11,8 +11,7 @@ public class PenGrab : MonoBehaviour {
 	private bool buttonPrev = false;
 	private GameObject selected;
 	private GameObject collided;
-	private float selectedObjectDistance;
-	private Vector3 selectedObjectHitPos;
+	private Vector3 selectedPoint;
 	
 	void Start () {
 
@@ -24,12 +23,8 @@ public class PenGrab : MonoBehaviour {
 		
 
 		RaycastHit collidedRaycast = GetCollidedRaycast(pointerRay);
-		DrawRay(pointerRay, collidedRaycast);
-		if (collidedRaycast.collider && !selected) {
-			collidedRaycast.collider.gameObject.SendMessageUpwards ("AddHoverHighlight");
-		}
 		
-		bool buttonCurrent = zspace.GetComponent<ZSCore>().IsTrackerTargetButtonPressed(ZSCore.TrackerTargetType.Primary, 0);
+		bool buttonCurrent = zspace.GetComponent<ZSCore>().IsTrackerTargetButtonPressed(ZSCore.TrackerTargetType.Primary, 1);
 		
 		if (buttonCurrent && !buttonPrev) {
 			ButtonJustPressed(collidedRaycast);
@@ -39,17 +34,6 @@ public class PenGrab : MonoBehaviour {
 			ButtonJustReleased(collidedRaycast);
 		}
 		buttonPrev = buttonCurrent;
-	}
-	
-	void DrawRay(Ray ray, RaycastHit raycast) {
-		LineRenderer line = GetComponent<LineRenderer>();
-		line.SetPosition (0, ray.origin);
-		if(raycast.collider) {
-			float newLength = (ray.origin-raycast.point).magnitude;
-			line.SetPosition (1, ray.GetPoint(newLength));
-		} else {
-			line.SetPosition (1, ray.GetPoint(rayLength));
-		}
 	}
 	
 	RaycastHit GetCollidedRaycast(Ray pointerRay) {
@@ -69,7 +53,6 @@ public class PenGrab : MonoBehaviour {
 				shortestDistance = objectHitPos.magnitude;
 			}
 		}
-		
 		return collidedRaycast;
 	}
 	
@@ -77,30 +60,34 @@ public class PenGrab : MonoBehaviour {
 		if (!raycastHit.collider) {
 			return;
 		}
-		
+		selectedPoint = transform.position;
 		selected = raycastHit.collider.gameObject.transform.root.gameObject;
-		selected.rigidbody.drag = 0;
-		selectedObjectDistance =  raycastHit.distance;
-		selectedObjectHitPos = raycastHit.collider.gameObject.transform.root.transform.position - raycastHit.point;
+		//selectedObjectDistance =  raycastHit.distance;
+		//selectedObjectHitPos = raycastHit.collider.gameObject.transform.root.transform.position - raycastHit.point;
 		selected.rigidbody.isKinematic = false;	
+		selected.rigidbody.angularDrag = 10;
 	}
 		
 	void ButtonJustReleased(RaycastHit raycastHit) {
 		if (selected) {
 			selected.rigidbody.isKinematic = true;
-			selected.rigidbody.drag = 100;
+			selected.rigidbody.angularDrag = 100;
 			selected = null;
+
 		}
 	}
 	void ButtonPressed(Ray pointerRay) {
 		if (selected) {
 			selected.GetComponent<BlockSelection>().AddSelectedHighlight();
-			Vector3 diff = pointerRay.GetPoint(selectedObjectDistance)+selectedObjectHitPos - selected.transform.position;
-			Vector3 force = diff * springConstant - dampingConstant*selected.rigidbody.velocity;
-			if (force.magnitude > maxForce) {
-				force = maxForce*force.normalized;	
-			}
-			selected.rigidbody.AddForce(force);
+			Vector3 diff = selectedPoint - transform.position;
+			
+			Vector3 rotation = diff * springConstant;// - dampingConstant*selected.rigidbody.angularVelocity;
+		//	if (force.magnitude > maxForce) {
+		//		force = maxForce*force.normalized;	
+		//	}
+			
+			Vector3 force = new Vector3(0, rotation.z, -rotation.y);
+			selected.rigidbody.AddTorque(force);
 		}
 	}
 	
@@ -112,4 +99,3 @@ public class PenGrab : MonoBehaviour {
 		}	
 	}
 }
-

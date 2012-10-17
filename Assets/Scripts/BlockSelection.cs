@@ -6,7 +6,7 @@ public class BlockSelection : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		
+		RemoveHighlight();
 	}
 	
 	// Update is called once per frame

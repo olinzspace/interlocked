@@ -1,6 +1,11 @@
 ﻿<Properties GitUserInfo="UsingGIT">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\PenRotatePieceByDelta.cs">
+    <Files>
+      <File FileName="Assets\Scripts\PenGrab.cs" Line="112" Column="1" />
+      <File FileName="Assets\Scripts\PenRotatePieceByDelta.cs" Line="4" Column="35" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

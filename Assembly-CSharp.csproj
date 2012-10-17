@@ -51,6 +51,8 @@
      <Compile Include="Assets\Scripts\MouseRotate.cs" />
      <Compile Include="Assets\Scripts\PenGrab.cs" />
      <Compile Include="Assets\Scripts\PenRotate.cs" />
+     <Compile Include="Assets\Scripts\PenRotatePiece.cs" />
+     <Compile Include="Assets\Scripts\PenRotatePieceByDelta.cs" />
      <Compile Include="Assets\Scripts\StereoSettings.cs" />
      <Compile Include="Assets\Scripts\StylusTransform.cs" />
      <Compile Include="Assets\Scripts\zSpace\Reset.cs" />
