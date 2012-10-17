@@ -80,6 +80,8 @@ public class PenGrab : MonoBehaviour {
 		
 		selected = raycastHit.collider.gameObject.transform.root.gameObject;
 		selected.rigidbody.drag = 0;
+		// selected.GetComponent<BlockPositions>().lastPos = selected.transform.position;
+		
 		selectedObjectDistance =  raycastHit.distance;
 		selectedObjectHitPos = raycastHit.collider.gameObject.transform.root.transform.position - raycastHit.point;
 		selected.rigidbody.isKinematic = false;	
@@ -87,11 +89,17 @@ public class PenGrab : MonoBehaviour {
 		
 	void ButtonJustReleased(RaycastHit raycastHit) {
 		if (selected) {
+			// BlockPositions blockPos = selected.GetComponent<BlockPositions>();
+			// if (blockPos.IsNearOriginalPos() && !blockPos.WasNearOriginalPos()) {
+			//  	blockPos.snapbackForce = true;
+			// }
+			
 			selected.rigidbody.isKinematic = true;
 			selected.rigidbody.drag = 100;
 			selected = null;
 		}
 	}
+	
 	void ButtonPressed(Ray pointerRay) {
 		if (selected) {
 			selected.GetComponent<BlockSelection>().AddSelectedHighlight();
