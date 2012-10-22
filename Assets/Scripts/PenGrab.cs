@@ -6,7 +6,9 @@ public class PenGrab : MonoBehaviour {
 	public float dampingConstant = 10.0f;
 	public float rayLength = 10.0f;
 	public float maxForce = 10.0f;
+	public GameObject[] puzzlePieces;
 	public GameObject zspace;
+	public int nextLevel;
 	
 	private bool buttonPrev = false;
 	private GameObject selected;
@@ -26,7 +28,8 @@ public class PenGrab : MonoBehaviour {
 		RaycastHit collidedRaycast = GetCollidedRaycast(pointerRay);
 		DrawRay(pointerRay, collidedRaycast);
 		if (collidedRaycast.collider && !selected) {
-			collidedRaycast.collider.gameObject.SendMessageUpwards ("AddHoverHighlight");
+			GameObject hoverObject = collidedRaycast.collider.gameObject.transform.root.gameObject;
+			hoverObject.GetComponent<BlockSelection>().AddHoverHighlight();
 		}
 		
 		bool buttonCurrent = zspace.GetComponent<ZSCore>().IsTrackerTargetButtonPressed(ZSCore.TrackerTargetType.Primary, 0);
@@ -80,7 +83,7 @@ public class PenGrab : MonoBehaviour {
 		
 		selected = raycastHit.collider.gameObject.transform.root.gameObject;
 		selected.rigidbody.drag = 0;
-		// selected.GetComponent<BlockPositions>().lastPos = selected.transform.position;
+//		selected.GetComponent<BlockPositions>().lastPos = selected.transform.position;
 		
 		selectedObjectDistance =  raycastHit.distance;
 		selectedObjectHitPos = raycastHit.collider.gameObject.transform.root.transform.position - raycastHit.point;
@@ -89,15 +92,27 @@ public class PenGrab : MonoBehaviour {
 		
 	void ButtonJustReleased(RaycastHit raycastHit) {
 		if (selected) {
-			// BlockPositions blockPos = selected.GetComponent<BlockPositions>();
-			// if (blockPos.IsNearOriginalPos() && !blockPos.WasNearOriginalPos()) {
-			//  	blockPos.snapbackForce = true;
-			// }
+//			BlockPositions blockPos = selected.GetComponent<BlockPositions>();
+//			if (blockPos.IsNearOriginalPos() && !blockPos.WasNearOriginalPos()) {
+//			 	blockPos.snapbackForce = true;
+//				selected.GetComponent<BlockSelection>().AddSelectedHighlight();
+//			}
 			
+			// Check to see if user has won
+			int numPiecesInOrigPos = 0;
+			foreach (GameObject puzzlePiece in puzzlePieces) {
+				if (puzzlePiece.GetComponent<BlockPositions>().IsNearOriginalPos())
+					numPiecesInOrigPos++;
+			}
+			if (numPiecesInOrigPos <= 1)
+				Application.LoadLevel (nextLevel);
+				
 			selected.rigidbody.isKinematic = true;
 			selected.rigidbody.drag = 100;
 			selected = null;
 		}
+		
+		
 	}
 	
 	void ButtonPressed(Ray pointerRay) {

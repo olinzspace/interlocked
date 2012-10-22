@@ -18,7 +18,6 @@ public class PenRotatePiece : MonoBehaviour {
 	}
 	
 	void Update () {
-		ClearBlockHighlighting();
 		Ray pointerRay = new Ray(transform.position, transform.rotation*Vector3.forward);
 		
 
@@ -119,13 +118,5 @@ public class PenRotatePiece : MonoBehaviour {
 
 			Debug.Log(delta);
 		}
-	}
-	
-	void ClearBlockHighlighting() {
-		Object[] objects = FindObjectsOfType(typeof(BlockSelection));
-		foreach (Object block in objects) {
-			BlockSelection blockSelection = block as BlockSelection;
-			blockSelection.RemoveHighlight();
-		}	
 	}
 }

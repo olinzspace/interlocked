@@ -20,6 +20,7 @@ public class BlockPositions : MonoBehaviour {
 	void Update () {
 		if (AtOriginalPos () || !IsNearOriginalPos ()) {
 			snapbackForce = false;
+			gameObject.GetComponent<BlockSelection>().RemoveHighlight();
 		}
 		if (snapbackForce) {
 			Vector3 diff = transform.position - originalPos;
