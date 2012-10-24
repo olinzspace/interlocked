@@ -2,10 +2,11 @@ using UnityEngine;
 using System.Collections;
 
 public class PenRotatePiece : MonoBehaviour {
-	public float springConstant = 100.0f;
-	public float dampingConstant = 10.0f;
+	public float springConstant = 1.0f;
+	public float dampingConstant = 5f;
 	public float rayLength = 10.0f;
 	public float maxForce = 10.0f;
+	public float snapAngle = 45.0f;
 	public GameObject zspace;
 	
 	private bool buttonPrev = false;
@@ -77,46 +78,29 @@ public class PenRotatePiece : MonoBehaviour {
 
 		}
 	}
+	
 	void ButtonPressed(Ray pointerRay) {
 		if (selected) {
 			selected.GetComponent<BlockSelection>().AddSelectedHighlight();
-			//Quaternion difference = Quaternion.Inverse(transform.rotation)*initQuat;
-			Vector3 diff = transform.rotation.eulerAngles - initQuat.eulerAngles;
-			Vector3 selectedDiff = selected.transform.rotation.eulerAngles - initSelectedQuat.eulerAngles;
-			
-			Vector3 delta = selectedDiff - diff;
-			
-			//Vector3 diff = pointerRay.GetPoint(selectedObjectDistance)+selectedObjectHitPos - selected.transform.rotation;
-			//Vector3 force = diff * springConstant - dampingConstant*selected.rigidbody.velocity;
-			//if (force.magnitude > maxForce) {
-			//	force = maxForce*force.normalized;	
-			//}
-			
-			//Vector3 force = new Vector3(0, rotation.z, -rotation.y);
-			//Vector3 diff = difference.eulerAngles;
-			float dy = delta.y;
-			if (delta.y > 180) {
-				dy -= 360; 	
-			} else if (delta.y < -180) {
-				dy += 360;	
-			}
-			
-			float dx = delta.y;
-			if (delta.x > 180) {
-				dx -= 360; 	
-			} else if (delta.y < -180) {
-				dx += 360;	
-			}
-			
-			//rot = 180 * ((Input.mousePosition.x - Screen.width / 2) / (Screen.width / 2));
-			
-			
-			Quaternion q = Quaternion.identity;
-			q.eulerAngles =initSelectedQuat.eulerAngles + diff;
-			selected.rigidbody.MoveRotation(q);
-			//selected.rigidbody.AddTorque(-dx, -dy, 0);
 
-			Debug.Log(delta);
+			Vector3 diff = this.transform.rotation.eulerAngles - initQuat.eulerAngles;
+			float dx = Mathf.Round(diff.x/snapAngle)*snapAngle;
+			float dy = Mathf.Round(diff.y/snapAngle)*snapAngle;
+			float dz = Mathf.Round(diff.z/snapAngle)*snapAngle;
+			Vector3 targetAngle = EulerAnglesInDomain(new Vector3(dx, dy, dz));
+			
+			Vector3 blockAngle = EulerAnglesInDomain (selected.gameObject.transform.rigidbody.rotation.eulerAngles - initSelectedQuat.eulerAngles);
+			Vector3 angleDiff = EulerAnglesInDomain (targetAngle - blockAngle);
+			
+			Vector3 angVel = EulerAnglesInDomain (selected.gameObject.transform.rigidbody.angularVelocity);
+			selected.rigidbody.AddTorque (springConstant*angleDiff - dampingConstant*angVel);
 		}
+	}
+	
+	private Vector3 EulerAnglesInDomain(Vector3 eulerAngles) {
+		eulerAngles.x = (float)((int)(eulerAngles.x + 900) % 360) - 180.0f;
+		eulerAngles.y = (float)((int)(eulerAngles.y + 900) % 360) - 180.0f;
+		eulerAngles.z = (float)((int)(eulerAngles.z + 900) % 360) - 180.0f;
+		return eulerAngles;
 	}
 }
