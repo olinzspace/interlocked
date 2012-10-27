@@ -67,7 +67,7 @@ public class PenRotatePiece : MonoBehaviour {
 		//selectedObjectDistance =  raycastHit.distance;
 		//selectedObjectHitPos = raycastHit.collider.gameObject.transform.root.transform.position - raycastHit.point;
 		selected.rigidbody.isKinematic = false;	
-		selected.rigidbody.angularDrag = 10;
+		selected.rigidbody.angularDrag = 30;
 	}
 		
 	void ButtonJustReleased(RaycastHit raycastHit) {
