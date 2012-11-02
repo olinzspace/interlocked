@@ -47,6 +47,7 @@
      <Compile Include="Assets\Scripts\BlockPositions.cs" />
      <Compile Include="Assets\Scripts\BlockSelection.cs" />
      <Compile Include="Assets\Scripts\GimbleSelection.cs" />
+     <Compile Include="Assets\Scripts\Logger.cs" />
      <Compile Include="Assets\Scripts\MouseGrab.cs" />
      <Compile Include="Assets\Scripts\MouseGrabTrash.cs" />
      <Compile Include="Assets\Scripts\MouseRotate.cs" />
