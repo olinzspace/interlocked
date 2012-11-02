@@ -8,7 +8,7 @@ public class PenGrab : MonoBehaviour {
 	public float maxForce = 10.0f;
 	public GameObject[] puzzlePieces;
 	public GameObject zspace;
-	public int nextLevel;
+	public GameObject levelManager;
 	
 	private bool buttonPrev = false;
 	private GameObject selected;
@@ -104,8 +104,9 @@ public class PenGrab : MonoBehaviour {
 				if (puzzlePiece.GetComponent<BlockPositions>().IsNearOriginalPos())
 					numPiecesInOrigPos++;
 			}
-			if (numPiecesInOrigPos <= 1)
-				Application.LoadLevel (nextLevel);
+			if (numPiecesInOrigPos <= 1) {
+				levelManager.GetComponent<LevelManager>().LevelFinished();
+			}
 				
 			selected.rigidbody.isKinematic = true;
 			selected.rigidbody.drag = 100;

@@ -47,7 +47,7 @@
      <Compile Include="Assets\Scripts\BlockPositions.cs" />
      <Compile Include="Assets\Scripts\BlockSelection.cs" />
      <Compile Include="Assets\Scripts\GimbleSelection.cs" />
-     <Compile Include="Assets\Scripts\Logger.cs" />
+     <Compile Include="Assets\Scripts\LevelManager.cs" />
      <Compile Include="Assets\Scripts\MouseGrab.cs" />
      <Compile Include="Assets\Scripts\MouseGrabTrash.cs" />
      <Compile Include="Assets\Scripts\MouseRotate.cs" />
@@ -55,9 +55,9 @@
      <Compile Include="Assets\Scripts\PenRotate.cs" />
      <Compile Include="Assets\Scripts\PenRotatePiece.cs" />
      <Compile Include="Assets\Scripts\PenRotatePieceByDelta.cs" />
+     <Compile Include="Assets\Scripts\Reset.cs" />
      <Compile Include="Assets\Scripts\StereoSettings.cs" />
      <Compile Include="Assets\Scripts\StylusTransform.cs" />
-     <Compile Include="Assets\Scripts\zSpace\Reset.cs" />
      <Compile Include="Assets\Scripts\zSpace\ZSCore.cs" />
      <Compile Include="Assets\Scripts\zSpace\ZSFinalCamera.cs" />
      <Compile Include="Assets\Scripts\zSpace\ZSLeftCamera.cs" />
