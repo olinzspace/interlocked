@@ -16,3 +16,4 @@ Temp
 *.pidb
 build
 *.csv
+userId.txt

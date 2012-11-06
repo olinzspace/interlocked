@@ -10,6 +10,7 @@ public class PenGrab : MonoBehaviour {
 	public GameObject zspace;
 	public GameObject levelManager;
 	
+	private bool firstPieceLiberated = false;
 	private bool buttonPrev = false;
 	private GameObject selected;
 	private GameObject collided;
@@ -17,7 +18,6 @@ public class PenGrab : MonoBehaviour {
 	private Vector3 selectedObjectHitPos;
 	
 	void Start () {
-
 	}
 	
 	void Update () {
@@ -81,6 +81,9 @@ public class PenGrab : MonoBehaviour {
 			return;
 		}
 		
+		// Increase logger's count for number of selections
+		levelManager.GetComponent<LevelManager>().IncrNumSelectEvents();
+		
 		selected = raycastHit.collider.gameObject.transform.root.gameObject;
 		selected.rigidbody.drag = 0;
 //		selected.GetComponent<BlockPositions>().lastPos = selected.transform.position;
@@ -104,7 +107,12 @@ public class PenGrab : MonoBehaviour {
 				if (puzzlePiece.GetComponent<BlockPositions>().IsNearOriginalPos())
 					numPiecesInOrigPos++;
 			}
-			if (numPiecesInOrigPos <= 1) {
+			if (numPiecesInOrigPos == puzzlePieces.Length - 1 && !firstPieceLiberated) {
+				levelManager.GetComponent<LevelManager>().SetFirstPieceLiberationTime();
+				Debug.Log ("Liberated first piece!");
+				firstPieceLiberated = true;
+			}
+			else if (numPiecesInOrigPos <= 1) {
 				levelManager.GetComponent<LevelManager>().LevelFinished();
 			}
 				
