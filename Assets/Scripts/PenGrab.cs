@@ -81,12 +81,20 @@ public class PenGrab : MonoBehaviour {
 			return;
 		}
 		
-		// Increase logger's count for number of selections
-		levelManager.GetComponent<LevelManager>().IncrNumSelectEvents();
 		
 		selected = raycastHit.collider.gameObject.transform.root.gameObject;
 		selected.rigidbody.drag = 0;
 //		selected.GetComponent<BlockPositions>().lastPos = selected.transform.position;
+		
+		// Increase logger's count for number of selections
+		int pieceIndex = -1;
+		for (int i=0; i<puzzlePieces.Length; i++) {
+			if (selected == puzzlePieces[i]) {
+				pieceIndex = i;
+				break;
+			}
+		}
+		levelManager.GetComponent<LevelManager>().IncrNumSelectEvents(pieceIndex);
 		
 		selectedObjectDistance =  raycastHit.distance;
 		selectedObjectHitPos = raycastHit.collider.gameObject.transform.root.transform.position - raycastHit.point;
