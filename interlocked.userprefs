@@ -1,11 +1,33 @@
 ﻿<Properties GitUserInfo="UsingGIT">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="..\..\..\..\Program Files\zSpace\ZSpaceLab\1.0.0.13639\Src\Assets\Scripts\zSpace\ZSDragTool.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="..\..\..\..\Program Files\zSpace\ZSpaceLab\1.0.0.13639\Src\Assets\Scripts\SceneManager.cs">
     <Files>
       <File FileName="..\..\..\..\Program Files\zSpace\ZSpaceLab\1.0.0.13639\Src\Assets\Scripts\zSpace\ZSDragTool.cs" Line="287" Column="3" />
       <File FileName="Assets\Scripts\LevelManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\PenGrab.cs" Line="89" Column="74" />
-      <File FileName="Assets\Scripts\MouseRotate.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\PenGrab.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\MouseRotate.cs" Line="35" Column="45" />
+      <File FileName="Assets\Scripts\MouseGrab.cs" Line="88" Column="35" />
+      <File FileName="..\..\..\..\Program Files\zSpace\ZSpaceLab\1.0.0.13639\Src\Assets\Scripts\ServerLocator.cs" Line="53" Column="21" />
+      <File FileName="..\..\..\..\Program Files\zSpace\ZSpaceLab\1.0.0.13639\Src\Assets\Scripts\CameraManipulator.cs" Line="46" Column="11" />
+      <File FileName="..\..\..\..\Program Files\zSpace\ZSpaceLab\1.0.0.13639\Src\Assets\Scripts\SceneManager.cs" Line="225" Column="28" />
+      <File FileName="..\..\..\..\Program Files\zSpace\ZSpaceLab\1.0.0.13639\Src\Assets\Shaders\Selected.shader" Line="13" Column="2" />
+      <File FileName="..\..\..\..\Program Files\zSpace\ZSpaceLab\1.0.0.13639\Src\Assets\Shaders\Hovered.shader" Line="1" Column="1" />
+      <File FileName="..\..\..\..\Program Files\zSpace\ZSpaceLab\1.0.0.13639\Src\Assets\Shaders\EmissiveDiffuse.shader" Line="1" Column="1" />
+      <File FileName="..\..\..\..\Program Files\zSpace\ZSpaceLab\1.0.0.13639\Src\Assets\Shaders\AdvancedSS.cginc" Line="31" Column="28" />
+      <File FileName="..\..\..\..\Program Files\zSpace\ZSpaceLab\1.0.0.13639\Src\Assets\Scripts\CoplanarSnap.cs" Line="12" Column="31" />
+      <File FileName="..\..\..\..\Program Files\zSpace\ZSpaceLab\1.0.0.13639\Src\Assets\Scripts\CoradialSnap.cs" Line="29" Column="22" />
+      <File FileName="..\..\..\..\Program Files\zSpace\ZSpaceLab\1.0.0.13639\Src\Assets\Scripts\DisplayBounds.cs" Line="94" Column="97" />
+      <File FileName="..\..\..\..\Program Files\zSpace\ZSpaceLab\1.0.0.13639\Src\Assets\Scripts\DrawGrid.js" Line="22" Column="19" />
+      <File FileName="..\..\..\..\Program Files\zSpace\ZSpaceLab\1.0.0.13639\Src\Assets\Scripts\ExplodeParts.cs" Line="269" Column="100" />
+      <File FileName="..\..\..\..\Program Files\zSpace\ZSpaceLab\1.0.0.13639\Src\Assets\Scripts\FileBrowser2D.cs" Line="17" Column="26" />
+      <File FileName="..\..\..\..\Program Files\zSpace\ZSpaceLab\1.0.0.13639\Src\Assets\Scripts\FileBrowserGUI2D.cs" Line="22" Column="83" />
+      <File FileName="..\..\..\..\Program Files\zSpace\ZSpaceLab\1.0.0.13639\Src\Assets\Scripts\FixedSnap.cs" Line="17" Column="35" />
+      <File FileName="..\..\..\..\Program Files\zSpace\ZSpaceLab\1.0.0.13639\Src\Assets\Scripts\ImageLoader.cs" Line="30" Column="12" />
+      <File FileName="..\..\..\..\Program Files\zSpace\ZSpaceLab\1.0.0.13639\Src\Assets\Scripts\LoadAsset.cs" Line="102" Column="33" />
+      <File FileName="..\..\..\..\Program Files\zSpace\ZSpaceLab\1.0.0.13639\Src\Assets\Scripts\ModelPart.cs" Line="49" Column="11" />
+      <File FileName="..\..\..\..\Program Files\zSpace\ZSpaceLab\1.0.0.13639\Src\Assets\Scripts\ObjectHighlighter.cs" Line="16" Column="11" />
+      <File FileName="..\..\..\..\Program Files\zSpace\ZSpaceLab\1.0.0.13639\Src\Assets\Scripts\Snap.cs" Line="125" Column="22" />
+      <File FileName="..\..\..\..\Program Files\zSpace\ZSpaceLab\1.0.0.13639\Src\Assets\Scripts\StylusManager.cs" Line="28" Column="11" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

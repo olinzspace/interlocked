@@ -29,7 +29,8 @@ public class PenGrab : MonoBehaviour {
 		DrawRay(pointerRay, collidedRaycast);
 		if (collidedRaycast.collider && !selected) {
 			GameObject hoverObject = collidedRaycast.collider.gameObject.transform.root.gameObject;
-			hoverObject.GetComponent<BlockSelection>().AddHoverHighlight();
+			if (collidedRaycast.collider.GetComponent<BlockSelection>() != null)
+				hoverObject.GetComponent<BlockSelection>().AddHoverHighlight();
 		}
 		
 		bool buttonCurrent = zspace.GetComponent<ZSCore>().IsTrackerTargetButtonPressed(ZSCore.TrackerTargetType.Primary, 0);
@@ -80,14 +81,16 @@ public class PenGrab : MonoBehaviour {
 		if (!raycastHit.collider) {
 			return;
 		}
-		
+
 		// Increase logger's count for number of selections
 		levelManager.GetComponent<LevelManager>().IncrNumSelectEvents();
-		
+
 		selected = raycastHit.collider.gameObject.transform.root.gameObject;
-		selected.rigidbody.drag = 0;
+
+		if (selected && selected.rigidbody != null) {
+			selected.rigidbody.drag = 0;
 //		selected.GetComponent<BlockPositions>().lastPos = selected.transform.position;
-		
+		}
 		selectedObjectDistance =  raycastHit.distance;
 		selectedObjectHitPos = raycastHit.collider.gameObject.transform.root.transform.position - raycastHit.point;
 		selected.rigidbody.isKinematic = false;	
