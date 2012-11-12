@@ -68,8 +68,9 @@ public class MouseGrab : MonoBehaviour {
 					break;
 				}
 			}
-			levelManager.GetComponent<LevelManager>().IncrNumSelectEvents(pieceIndex);
-			
+			if (pieceIndex != -1) {
+				levelManager.GetComponent<LevelManager>().IncrNumSelectEvents(pieceIndex);
+			}
 			
 		} else if (buttonCurrent) {
 			UpdateForce();
