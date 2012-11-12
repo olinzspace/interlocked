@@ -6,15 +6,19 @@ public class MouseGrab : MonoBehaviour {
 	public float dampingConstant = 10.0f;
 	public float rayLength = 10.0f;
 	public float maxForce = 10.0f;
+	public GameObject[] puzzlePieces;
 	
 	public GameObject gimble;
 	public Camera mainCamera;
+	public GameObject levelManager;
 	
 	private GameObject selectedGameobject;
 	private float selectedObjectDistance;
 	private Vector3 selectedHitPos;
 	private Vector3 gimbleHitPos;
 	private Vector3 moveDirection = Vector3.zero;
+	private bool firstPieceLiberated = false;
+	
 	Ray pointerRay;
 
 	Vector3 initialDeltaGimble = Vector3.zero;
@@ -29,6 +33,7 @@ public class MouseGrab : MonoBehaviour {
 		
 		bool buttonCurrent = Input.GetMouseButton(0);
 		if (buttonCurrent && !buttonPrev) {
+			//Button just pressed
 			initialDeltaGimble = Vector3.zero;
 			if (!selectedGameobject) {
 				
@@ -54,6 +59,18 @@ public class MouseGrab : MonoBehaviour {
 			} else {
 				HideGimble();
 			}
+			
+			// Increase logger's count for number of selections
+			int pieceIndex = -1;
+			for (int i=0; i<puzzlePieces.Length; i++) {
+				if (selectedGameobject == puzzlePieces[i]) {
+					pieceIndex = i;
+					break;
+				}
+			}
+			levelManager.GetComponent<LevelManager>().IncrNumSelectEvents(pieceIndex);
+			
+			
 		} else if (buttonCurrent) {
 			UpdateForce();
 
@@ -64,6 +81,23 @@ public class MouseGrab : MonoBehaviour {
 				
 			}
 			initialDeltaGimble = Vector3.zero;
+			
+
+						
+			// Check to see if user has won
+			int numPiecesInOrigPos = 0;
+			foreach (GameObject puzzlePiece in puzzlePieces) {
+				if (puzzlePiece.GetComponent<BlockPositions>().IsNearOriginalPos())
+					numPiecesInOrigPos++;
+			}
+			if (numPiecesInOrigPos == puzzlePieces.Length - 1 && !firstPieceLiberated) {
+				levelManager.GetComponent<LevelManager>().SetFirstPieceLiberationTime();
+				Debug.Log ("Liberated first piece!");
+				firstPieceLiberated = true;
+			}
+			else if (numPiecesInOrigPos <= 1) {
+				levelManager.GetComponent<LevelManager>().LevelFinished();
+			}
 		}
 		buttonPrev = buttonCurrent;
 	}

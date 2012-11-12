@@ -14,13 +14,18 @@ public class LevelManager : MonoBehaviour {
 	private String userId;
 	private int numSelectEvents, numMouseEvents;
 	private TimeSpan firstPieceLiberationTime;
-	
+	private int[] numSelectByPiece;
+
 	// Use this for initialization
 	void Start () {
-		numSelectEvents = 0;
-		numMouseEvents = 0;
 		firstPieceLiberationTime = new TimeSpan(0);
-		
+		if (pen.GetComponent<PenGrab>()) {
+			numSelectByPiece = new int[pen.GetComponent<PenGrab>().puzzlePieces.Length];
+		} else {
+			//FIX ME
+			numSelectByPiece = new int[pen.GetComponent<MouseGrab>().puzzlePieces.Length];
+		}
+			
 		sw = new Stopwatch();
 		sw.Start();
 	}
@@ -30,7 +35,8 @@ public class LevelManager : MonoBehaviour {
 	
 	}
 	
-	public void IncrNumSelectEvents() {
+	public void IncrNumSelectEvents(int pieceIndex) {
+		numSelectByPiece[pieceIndex]++;
 		numSelectEvents++;
 	}
 	
@@ -70,6 +76,18 @@ public class LevelManager : MonoBehaviour {
 		
 		bool logExists = File.Exists (filename);
 		using (StreamWriter writer = new StreamWriter (filename, true)) {
+			
+			string numSelectByPieceStr = "";
+			for (int i=0; i<numSelectByPiece.Length; i++) {
+				numSelectByPieceStr += numSelectByPiece[i];
+				if (i != numSelectByPiece.Length) {
+					numSelectByPieceStr += ", ";
+				}
+			}
+			for (int i=numSelectByPiece.Length; i<8; i++) {
+				numSelectByPieceStr += ", --";
+			}
+			
 			if (!logExists) {
 				writer.Write (	"UserID, " + 
 							  	"Date, " +
@@ -77,7 +95,15 @@ public class LevelManager : MonoBehaviour {
 								"TotalElapsedTime, " + 
 								"NumSelectionEvents, " +
 								"NumMouseEvents, " + 
-								"FirstPieceLiberationTime" + "\n");
+								"FirstPieceLiberationTime, " + 
+								"Piece1Selections, " +
+								"Piece2Selections, " +
+								"Piece3Selections, " +
+								"Piece4Selections, " +
+								"Piece5Selections, " +
+								"Piece6Selections, " +
+								"Piece7Selections, " +
+								"Piece8Selections" + "\n");
 								
 			}
 			writer.Write (	userId + ", " + 
@@ -86,7 +112,8 @@ public class LevelManager : MonoBehaviour {
 							FormattedTimeString(totalElapsedTime) + ", " +
 							numSelectEvents + ", " +
 							numMouseEvents + ", " + 
-							FormattedTimeString(firstPieceLiberationTime) + "\n");
+							FormattedTimeString(firstPieceLiberationTime) + ", " +
+							numSelectByPieceStr + "\n");
 		}
 		
 		Application.LoadLevel (nextLevel);
