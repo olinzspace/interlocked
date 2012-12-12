@@ -2,14 +2,78 @@ using UnityEngine;
 using System.Collections;
 
 public class StartGUI : MonoBehaviour {
-
-	void OnGUI () {
-		// Make a background box
-		GUI.Box(new Rect(10,10,100,90), "Loader Menu");
-
-		// Make the first button. If it is pressed, Application.Loadlevel (1) will be executed
-		if(GUI.Button(new Rect(20,40,80,20), "Level 1")) {
-			Application.LoadLevel(0);
+	
+	public static string userid; 
+	
+	private string prevUserid;
+	private string defaultUseridText = "Enter User Name/ID";
+	private bool error = false;
+	private string errorMessage;
+	private GUIStyle titleStyle, errorStyle;
+	
+	public void Start () {
+		userid = prevUserid = defaultUseridText;
+		
+		titleStyle = new GUIStyle();
+		titleStyle.fontSize = 48;
+		
+		errorStyle = new GUIStyle();
+		errorStyle.fontSize = 18;
+	}
+	
+	public void OnGUI () {
+		// Center components on screen
+		GUILayout.BeginArea(new Rect(0, 0, Screen.width, Screen.height));
+	    GUILayout.FlexibleSpace();
+	    GUILayout.BeginHorizontal();
+	    GUILayout.FlexibleSpace();
+		GUILayout.BeginVertical();
+		
+		
+		// Title
+		GUILayout.Label("zSpace Interlocked", titleStyle);
+		GUILayout.Space(20);
+		
+		// Userid textbox
+		prevUserid = userid;
+		userid = GUILayout.TextField(userid, 40, GUILayout.Width(400), GUILayout.Height(50));
+		if (!userid.Equals(prevUserid))
+			error = false;
+		GUILayout.Space(10);
+		
+		// Level options
+		GUILayout.BeginHorizontal();
+		if(GUILayout.Button("3D", GUILayout.Width(190), GUILayout.Height(50))) {
+			if (userid.Equals("") || userid.Equals(defaultUseridText)) {
+				error = true;
+				errorMessage = "Invalid user name/ID";
+			} else {
+				Application.LoadLevel(1);			
+			}
 		}
+		GUILayout.Space(20);
+		if(GUILayout.Button("2D", GUILayout.Width(190), GUILayout.Height(50))) {
+			if (userid.Equals("") || userid.Equals(defaultUseridText)) {
+				error = true;
+				errorMessage = "Invalid user name/ID";
+			} else {
+				Application.LoadLevel(7);
+			}
+		}
+		GUILayout.EndHorizontal();
+		
+		// Error message (if any)
+		if (error) {
+			GUILayout.Space(20);
+			GUILayout.Label(errorMessage, errorStyle);
+		}
+		
+		
+		// Center components on screen
+		GUILayout.EndVertical();
+	    GUILayout.FlexibleSpace();
+	    GUILayout.EndHorizontal();
+	    GUILayout.FlexibleSpace();
+	    GUILayout.EndArea();
 	}
 }
