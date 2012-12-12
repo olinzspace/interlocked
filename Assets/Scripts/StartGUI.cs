@@ -2,10 +2,8 @@ using UnityEngine;
 using System.Collections;
 
 public class StartGUI : MonoBehaviour {
-	
-	public static string userid; 
-	
-	private string prevUserid;
+
+	private string prevUserid, userid;
 	private string defaultUseridText = "Enter User Name/ID";
 	private bool error = false;
 	private string errorMessage;
@@ -48,6 +46,7 @@ public class StartGUI : MonoBehaviour {
 				error = true;
 				errorMessage = "Invalid user name/ID";
 			} else {
+				LevelManager.userId = userid;
 				Application.LoadLevel(1);			
 			}
 		}
@@ -57,6 +56,7 @@ public class StartGUI : MonoBehaviour {
 				error = true;
 				errorMessage = "Invalid user name/ID";
 			} else {
+				LevelManager.userId = userid;
 				Application.LoadLevel(7);
 			}
 		}

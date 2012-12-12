@@ -9,9 +9,9 @@ public class LevelManager : MonoBehaviour {
 	public GameObject pen;
 	private string filename = "userdata.csv";
 	private string userIdLocation = "userId.txt";
+	static public string userId;
 
 	private Stopwatch sw;
-	private String userId;
 	private int numSelectEvents, numMouseEvents;
 	private TimeSpan firstPieceLiberationTime;
 	private int[] numSelectByPiece;
@@ -21,7 +21,7 @@ public class LevelManager : MonoBehaviour {
 		firstPieceLiberationTime = new TimeSpan(0);
 		if (pen.GetComponent<PenGrab>()) {
 			numSelectByPiece = new int[pen.GetComponent<PenGrab>().puzzlePieces.Length];
-		} else {
+		} else if (pen.GetComponent<MouseGrab>()) {
 			//FIX ME
 			numSelectByPiece = new int[pen.GetComponent<MouseGrab>().puzzlePieces.Length];
 		}
@@ -51,18 +51,7 @@ public class LevelManager : MonoBehaviour {
 		}
 	}
 	
-	public void LevelFinished () {
-		// Get userId
-		userId = "FakeUser";
-		try {
-			using (StreamReader reader = new StreamReader (userIdLocation)) {
-				userId = reader.ReadLine ();
-			}
-			if (userId == null || userId.Equals("")) throw new FileNotFoundException();
-		} catch (FileNotFoundException) {
-			userId = "------";
-		}
-		
+	public void LevelFinished () {	
 		// Get today's date
 		string dateString = DateTime.Now.ToString ("yyyy-MM-dd");
 		
