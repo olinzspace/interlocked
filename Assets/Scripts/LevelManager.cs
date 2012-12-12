@@ -48,8 +48,6 @@ public class LevelManager : MonoBehaviour {
 		if (firstPieceLiberationTime.Ticks == 0) { // Has it not been set yet?
 			firstPieceLiberationTime = sw.Elapsed;
 			UnityEngine.Debug.Log ("Time to liberate first piece: " + FormattedTimeString (firstPieceLiberationTime));
-		} else {
-			UnityEngine.Debug.Log ("WARNING: FIRST PIECE WAS ALREADY LIBERATED!");
 		}
 	}
 	
@@ -72,7 +70,6 @@ public class LevelManager : MonoBehaviour {
 		sw.Stop();
 		TimeSpan totalElapsedTime = sw.Elapsed;
 		UnityEngine.Debug.Log ("Total time for level: " + FormattedTimeString(totalElapsedTime));
-		UnityEngine.Debug.Log ("Total number of selections: " + numSelectEvents);
 		
 		bool logExists = File.Exists (filename);
 		using (StreamWriter writer = new StreamWriter (filename, true)) {

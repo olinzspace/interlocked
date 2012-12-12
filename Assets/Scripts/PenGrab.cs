@@ -119,7 +119,7 @@ public class PenGrab : MonoBehaviour {
 			}
 			if (numPiecesInOrigPos == puzzlePieces.Length - 1 && !firstPieceLiberated) {
 				levelManager.GetComponent<LevelManager>().SetFirstPieceLiberationTime();
-				Debug.Log ("Liberated first piece!");
+//				Debug.Log ("Liberated first piece!");
 				firstPieceLiberated = true;
 			}
 			else if (numPiecesInOrigPos <= 1) {

@@ -14,7 +14,7 @@ public class MouseRotate : MonoBehaviour {
 	private Stopwatch mousePauseSw;
 	private int i; // For debugging purposes
 	
-	// Use this for initialization
+	// Use this for initializationf
 	void Start () {
 		oldMouseY = -Input.GetAxis ("Mouse Y");
 		oldMouseX = -Input.GetAxis ("Mouse X");
@@ -47,7 +47,7 @@ public class MouseRotate : MonoBehaviour {
 				levelManager.GetComponent<LevelManager>().IncrNumMouseEvents();
 				// Code for debugging purposes
 				i++;
-				UnityEngine.Debug.Log ("This is the " + i + "th mouse event");				
+//				UnityEngine.Debug.Log ("This is the " + i + "th mouse event");				
 			}
 			
 			mousePauseSw.Reset ();
