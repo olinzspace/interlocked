@@ -82,9 +82,14 @@ public class PenGrab : MonoBehaviour {
 			return;
 		}
 		selected = raycastHit.collider.gameObject.transform.root.gameObject;
+		if (!selected.GetComponent<BlockSelection>()) {
+			selected = null;
+			return;
+		}
 
 		if (selected && selected.rigidbody != null) {
 			selected.rigidbody.drag = 0;
+			selected.rigidbody.isKinematic = false;	
 //		selected.GetComponent<BlockPositions>().lastPos = selected.transform.position;
 		}
 		
@@ -96,11 +101,12 @@ public class PenGrab : MonoBehaviour {
 				break;
 			}
 		}
-		levelManager.GetComponent<LevelManager>().IncrNumSelectEvents(pieceIndex);
+		if (puzzlePieces.Length < pieceIndex)
+			levelManager.GetComponent<LevelManager>().IncrNumSelectEvents(pieceIndex);
 		
 		selectedObjectDistance =  raycastHit.distance;
 		selectedObjectHitPos = raycastHit.collider.gameObject.transform.root.transform.position - raycastHit.point;
-		selected.rigidbody.isKinematic = false;	
+		
 	}
 		
 	void ButtonJustReleased(RaycastHit raycastHit) {
@@ -135,7 +141,7 @@ public class PenGrab : MonoBehaviour {
 	}
 	
 	void ButtonPressed(Ray pointerRay) {
-		if (selected) {
+		if (selected && selected.GetComponent<BlockSelection>()) {
 			selected.GetComponent<BlockSelection>().AddSelectedHighlight();
 			Vector3 diff = pointerRay.GetPoint(selectedObjectDistance)+selectedObjectHitPos - selected.transform.position;
 			Vector3 force = diff * springConstant - dampingConstant*selected.rigidbody.velocity;

@@ -10,6 +10,8 @@ public class MouseRotate : MonoBehaviour {
 	
 	private Vector2 startMousePos;
 	private float oldMouseX, oldMouseY;
+	private bool altKeyIsDown = false;
+	private bool altKeyWasDown = false;
 	private int pauseTimeToRegisterMouseEvent = 500; // In milliseconds
 	private Stopwatch mousePauseSw;
 	private int i; // For debugging purposes
@@ -24,6 +26,8 @@ public class MouseRotate : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		altKeyIsDown = Input.GetKey (KeyCode.LeftAlt);
+		
 		float mouseX = -Input.GetAxis ("Mouse X");
 		float mouseY = -Input.GetAxis ("Mouse Y");
 		float deltaMouseX = Mathf.Round ((mouseX - oldMouseX)/0.1f) * 0.1f;
@@ -31,29 +35,37 @@ public class MouseRotate : MonoBehaviour {
 		
 //		Debug.Log (new Vector4(deltaMouseX, oldDeltaMouseX, oldDeltaMouseY, i));
 		
-		if (!withKey || Input.GetKey(KeyCode.LeftAlt)) {
+		if (!withKey || altKeyIsDown) {
 			transform.RotateAround(Vector3.zero, -transform.TransformDirection(Vector3.up), mouseX*rotationScale);
 			transform.RotateAround(Vector3.zero, -transform.TransformDirection(Vector3.left), mouseY*rotationScale);
 		}
 		
-		if (deltaMouseX == 0.0f && deltaMouseY == 0.0f) {
-			if (!mousePauseSw.IsRunning) {
-				mousePauseSw.Start ();
-			}
-			
-		} else if (mousePauseSw.IsRunning) {
-			mousePauseSw.Stop ();
-			if (mousePauseSw.ElapsedMilliseconds >= pauseTimeToRegisterMouseEvent) {
+		// Logging mouse movements
+		if (withKey) {
+			if (altKeyIsDown && !altKeyWasDown) {
 				levelManager.GetComponent<LevelManager>().IncrNumMouseEvents();
-				// Code for debugging purposes
-				i++;
-//				UnityEngine.Debug.Log ("This is the " + i + "th mouse event");				
 			}
-			
-			mousePauseSw.Reset ();
+		} else {
+			if (deltaMouseX == 0.0f && deltaMouseY == 0.0f) {
+				if (!mousePauseSw.IsRunning) {
+					mousePauseSw.Start ();
+				}
+				
+			} else if (mousePauseSw.IsRunning) {
+				mousePauseSw.Stop ();
+				if (mousePauseSw.ElapsedMilliseconds >= pauseTimeToRegisterMouseEvent) {
+					levelManager.GetComponent<LevelManager>().IncrNumMouseEvents();
+					// Code for debugging purposes
+					i++;
+					//				UnityEngine.Debug.Log ("This is the " + i + "th mouse event");				
+				}
+				
+				mousePauseSw.Reset ();
+			}
 		}
 		
 		oldMouseX = mouseX;
 		oldMouseY = mouseY;
+		altKeyWasDown = altKeyIsDown;
 	}
 }
